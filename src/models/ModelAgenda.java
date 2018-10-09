@@ -24,6 +24,15 @@ public class ModelAgenda {
 
     private String nombre;
     private String email;
+    private String telefono;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
     public String getNombre() {
         return nombre;
@@ -49,13 +58,13 @@ public class ModelAgenda {
      */
     public void conectarDB() {
         try {
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3309/agenda_mvc", "user_mvc", "pass_mvc.2018");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3307/agenda_mvc", "root", "");
             st = conexion.createStatement();
-            String sql = "SELECT * FROM contactos;";
-            System.out.println(sql);
-            rs = st.executeQuery(sql);
+            rs = st.executeQuery("SELECT * FROM contactos;");
             rs.next();
-            setValues();
+            nombre = rs.getString("nombre");
+            email = rs.getString("email");
+            telefono = rs.getString("telefono");
         } catch (SQLException err) {
             JOptionPane.showMessageDialog(null, "Error ModelAgenda 001: " + err.getMessage());
         }
@@ -69,6 +78,7 @@ public class ModelAgenda {
         try {
             nombre = rs.getString("nombre");
             email = rs.getString("email");
+            telefono = rs.getString("telefono");
         } catch (SQLException err) {
             JOptionPane.showMessageDialog(null, "Error model 102: " + err.getMessage());
 
@@ -82,7 +92,18 @@ public class ModelAgenda {
      */
     public void moverPrimerRegistro() {
         System.out.println("moverPrimerRegistro");
+         try{
+            if(rs.isLast()==false){
+                rs.first();
+                nombre = rs.getString("nombre");
+                email = rs.getString("email");
+                telefono = rs.getString("telefono");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR"+e.getMessage());
+        }
     }
+    
 
     /**
      * Método que realiza las siguiente acciones: 1.- Moverse al siguiente
@@ -92,6 +113,20 @@ public class ModelAgenda {
      */
     public void moverSiguienteRegistro() {
         System.out.println("moverSiguienteRegistro");
+         try{
+            if(rs.isLast()==false){
+                rs.next();
+                nombre = rs.getString("nombre");
+                email = rs.getString("email");
+                telefono = rs.getString("telefono");
+            }
+            else{
+                rs.previous();
+                JOptionPane.showMessageDialog(null,"Estas en el ultimo registro");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR"+e.getMessage());
+        }
     }
 
     /**
@@ -102,6 +137,20 @@ public class ModelAgenda {
      */
     public void moverAnteriorRegistro() {
         System.out.println("moverAnteriorRegistro");
+         try{
+            if(rs.isLast()==false){
+                rs.previous();
+                nombre = rs.getString("nombre");
+                email = rs.getString("email");
+                telefono = rs.getString("telefono");
+            }
+            else{
+                rs.next();
+                
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Estas en el primer Registro");
+        }
     }
 
     /**
@@ -111,5 +160,16 @@ public class ModelAgenda {
      */
     public void moverUltimoRegistro() {
         System.out.println("moverUltimoRegistro");
+        try{
+            if(rs.isLast()==false){
+                rs.last();
+                nombre = rs.getString("nombre");
+                email = rs.getString("email");
+                telefono = rs.getString("telefono");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR"+e.getMessage());
+        }
+
     }
 }
